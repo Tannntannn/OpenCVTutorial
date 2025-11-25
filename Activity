@@ -1,0 +1,37 @@
+import numpy as np
+import cv2
+
+# Read the image
+image = cv2.imread('activity.jpg')
+
+# Function to apply gamma correction
+def apply_gamma(image, gamma):
+    # Build a lookup table mapping pixel values [0, 255] to adjusted gamma values
+    inv_gamma = 1.0 / gamma
+    table = np.array([((i / 255.0) ** inv_gamma) * 255 for i in range(256)]).astype("uint8")
+    # Apply gamma correction using the lookup table
+    return cv2.LUT(image, table)
+
+# Apply different gamma values
+gamma_bright = apply_gamma(image, 0.5)  # Bright
+gamma_normal = apply_gamma(image, 1.0)  # Normal
+gamma_dark = apply_gamma(image, 2.0)    # Dark
+
+# Create named windows and position them
+cv2.namedWindow('Gamma 0.5 (Bright)', cv2.WINDOW_NORMAL)
+cv2.namedWindow('Gamma 1.0 (Normal)', cv2.WINDOW_NORMAL)
+cv2.namedWindow('Gamma 2.0 (Dark)', cv2.WINDOW_NORMAL)
+
+# Position windows side by side (adjust x-coordinates as needed)
+cv2.moveWindow('Gamma 0.5 (Bright)', 0, 100)
+cv2.moveWindow('Gamma 1.0 (Normal)', 450, 100)
+cv2.moveWindow('Gamma 2.0 (Dark)', 900, 100)
+
+# Display all images
+cv2.imshow('Gamma 0.5 (Bright)', gamma_bright)
+cv2.imshow('Gamma 1.0 (Normal)', gamma_normal)
+cv2.imshow('Gamma 2.0 (Dark)', gamma_dark)
+
+# Wait for key press and close all windows
+cv2.waitKey(0)
+cv2.destroyAllWindows()
